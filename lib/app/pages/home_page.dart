@@ -1,11 +1,11 @@
-import 'package:expchk/app/common/utils/colors.dart';
-import 'package:expchk/app/pages/add_items.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
 import 'package:expchk/app/common/widgets/item_tile.dart';
+import 'package:expchk/app/common/utils/colors.dart';
 import 'package:expchk/app/pages/settings.dart';
+// import 'package:expchk/app/pages/add_items.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
       appBar: _appBar(),
       floatingActionButton: GestureDetector(
         onTap: () {
-          Get.to(const AddItems());
+          // Get.to(const AddItems());
         },
         child: Container(
           height: 60,
