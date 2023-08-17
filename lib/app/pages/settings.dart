@@ -14,68 +14,23 @@ class Settings extends StatefulWidget {
 class _SettingsState extends State<Settings> {
   final isSignedIn = false;
 
-  final navScreens = [
-    const Settings(),
-    const HomePage(),
-  ];
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          onPressed: () {
-            Get.back();
-          },
-          icon: const Icon(
-            Icons.arrow_back_ios_new_rounded,
-          ),
+    return Column(
+      children: [
+        const SizedBox(
+          height: 20,
         ),
-        title: const Text("Settings"),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home_outlined,
-            ),
-            activeIcon: Icon(
-              Icons.home_rounded,
-            ),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.settings_outlined,
-            ),
-            label: "Settings",
-          ),
-        ],
-        onTap: (index) {
-          Get.to(
-            () => navScreens[index],
-            // transition: Transition.zoom,
-          );
-        },
-      ),
-      body: Container(
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 20,
-            ),
-            _themeTile(),
-            const SizedBox(
-              height: 20,
-            ),
-            _accountTile(),
-            const SizedBox(
-              height: 20,
-            ),
-            _generalTile(),
-          ],
+        _themeTile(),
+        const SizedBox(
+          height: 20,
         ),
-      ),
+        _accountTile(),
+        const SizedBox(
+          height: 20,
+        ),
+        _generalTile(),
+      ],
     );
   }
 

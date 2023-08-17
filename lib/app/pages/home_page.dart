@@ -1,8 +1,8 @@
+import 'package:expchk/app/pages/home.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-import 'package:expchk/app/common/widgets/item_tile.dart';
 import 'package:expchk/app/common/utils/colors.dart';
 import 'package:expchk/app/pages/settings.dart';
 // import 'package:expchk/app/pages/add_items.dart';
@@ -16,11 +16,12 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final navScreens = [
-    const HomePage(),
+    const Home(),
     const Settings(),
   ];
 
   bool isAscendSort = true;
+  int currScreenIndx = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +30,7 @@ class _HomePageState extends State<HomePage> {
       floatingActionButton: GestureDetector(
         onTap: () {
           // Get.to(const AddItems());
+          print("add tapped");
         },
         child: Container(
           height: 60,
@@ -53,13 +55,12 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomNavigationBar(
+        unselectedItemColor: primaryClr,
+        selectedItemColor: secondaryClr,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(
               Icons.home_outlined,
-            ),
-            activeIcon: Icon(
-              Icons.home_rounded,
             ),
             label: "Home",
           ),
@@ -71,63 +72,14 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
         onTap: (index) {
-          setState(() {
-            Get.to(
-              () => navScreens[index],
-            );
-          });
+          setState(
+            () {
+              currScreenIndx = index;
+            },
+          );
         },
       ),
-      body: Column(
-        children: [
-          Row(
-            children: [
-              const SizedBox(
-                width: 20,
-              ),
-              const Text(
-                "All Items",
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const Spacer(),
-              GestureDetector(
-                onTap: () {
-                  print("Sort");
-                },
-                child: const Icon(
-                  Icons.sort_rounded,
-                  size: 28,
-                ),
-              ),
-              const SizedBox(
-                width: 20,
-              ),
-              GestureDetector(
-                onTap: () {
-                  setState(
-                    () {
-                      isAscendSort = !isAscendSort;
-                    },
-                  );
-                },
-                child: Icon(
-                  isAscendSort
-                      ? Icons.arrow_downward_rounded
-                      : Icons.arrow_upward_rounded,
-                  size: 28,
-                ),
-              ),
-              const SizedBox(
-                width: 20,
-              ),
-            ],
-          ),
-          _showItems(),
-        ],
-      ),
+      body: navScreens[currScreenIndx],
     );
   }
 
@@ -141,14 +93,14 @@ class _HomePageState extends State<HomePage> {
         GestureDetector(
           child: const CircleAvatar(
             child: Icon(
-              Icons.settings_outlined,
+              Icons.person_outline_rounded,
             ),
           ),
           onTap: () {
-            Get.to(
-              () => const Settings(),
-              transition: Transition.zoom,
-            );
+            // Get.to(
+            //   () => const Settings(),
+            //   transition: Transition.zoom,
+            // );
             print("Profile");
           },
         ),
@@ -156,17 +108,6 @@ class _HomePageState extends State<HomePage> {
           width: 15,
         ),
       ],
-    );
-  }
-
-  _showItems() {
-    return Expanded(
-      child: ListView.builder(
-        itemCount: 10,
-        itemBuilder: (context, index) {
-          return ItemTile();
-        },
-      ),
     );
   }
 }
