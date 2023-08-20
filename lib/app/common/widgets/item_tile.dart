@@ -20,7 +20,8 @@ class ItemTile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Container(
-                margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+                margin: const EdgeInsets.only(
+                    left: 10, right: 10, top: 5, bottom: 5),
                 height: 50,
                 width: 50,
                 decoration: BoxDecoration(
