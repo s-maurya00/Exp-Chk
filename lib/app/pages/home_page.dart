@@ -1,3 +1,5 @@
+import 'package:expchk/app/common/services/theme_services.dart';
+import 'package:expchk/app/pages/add_item_page.dart';
 import 'package:expchk/app/pages/home.dart';
 import 'package:flutter/material.dart';
 
@@ -18,45 +20,67 @@ class _HomePageState extends State<HomePage> {
   final navScreens = [
     const Home(),
     const Settings(),
+    const AddItem(),
   ];
 
   bool isAscendSort = true;
   int currScreenIndx = 0;
+  bool isOnAddPage = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: _appBar(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: GestureDetector(
         onTap: () {
-          // Get.to(const AddItems());
-          print("add tapped");
+          setState(
+            () {
+              isOnAddPage = true;
+            },
+          );
         },
         child: Container(
-          height: 60,
-          width: 60,
+          height: 70,
+          width: 70,
           decoration: BoxDecoration(
-            color: primaryClrLight,
+            gradient: LinearGradient(
+              colors: [
+                isOnAddPage
+                    ? (Get.isDarkMode ? secondaryClrDark : secondaryClrLight)
+                    : (Get.isDarkMode ? primaryClrDark : primaryClrLight),
+                isOnAddPage
+                    ? (Get.isDarkMode ? secondaryClrLight : secondaryClrDark)
+                    : (Get.isDarkMode ? primaryClrLight : primaryClrDark),
+              ],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
             borderRadius: BorderRadius.circular(50),
             boxShadow: [
               BoxShadow(
-                color: primaryClrDark.withOpacity(0.5),
+                color: isOnAddPage
+                    ? (Get.isDarkMode
+                        ? secondaryClr.withOpacity(0.5)
+                        : secondaryClrDark.withOpacity(0.5))
+                    : (Get.isDarkMode
+                        ? primaryClr.withOpacity(0.5)
+                        : primaryClrDark.withOpacity(0.5)),
                 spreadRadius: 1,
                 blurRadius: 15,
                 offset: const Offset(0, 3),
               ),
             ],
           ),
-          child: const Icon(
+          child: Icon(
             Icons.add,
-            color: primaryClrDark,
+            color: isOnAddPage ? secondaryClrLight : primaryClrLight,
           ),
         ),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomNavigationBar(
         unselectedItemColor: primaryClr,
-        selectedItemColor: secondaryClr,
+        selectedItemColor: isOnAddPage ? primaryClr : secondaryClr,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(
@@ -75,11 +99,13 @@ class _HomePageState extends State<HomePage> {
           setState(
             () {
               currScreenIndx = index;
+              isOnAddPage = false;
             },
           );
         },
+        currentIndex: currScreenIndx,
       ),
-      body: navScreens[currScreenIndx],
+      body: navScreens[isOnAddPage == false ? currScreenIndx : 2],
     );
   }
 
@@ -89,19 +115,18 @@ class _HomePageState extends State<HomePage> {
         "ExpChk",
       ),
       scrolledUnderElevation: 0,
+      backgroundColor: context.theme.appBarTheme.backgroundColor,
       actions: [
         GestureDetector(
-          child: const CircleAvatar(
-            child: Icon(
-              Icons.person_outline_rounded,
-            ),
-          ),
+          child: Get.isDarkMode
+              ? const Icon(
+                  Icons.wb_sunny_outlined,
+                )
+              : const Icon(
+                  Icons.nightlight_round_rounded,
+                ),
           onTap: () {
-            // Get.to(
-            //   () => const Settings(),
-            //   transition: Transition.zoom,
-            // );
-            print("Profile");
+            ThemeController().switchTheme();
           },
         ),
         const SizedBox(

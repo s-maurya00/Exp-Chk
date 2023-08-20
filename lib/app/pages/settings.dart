@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-
-import 'home_page.dart';
 
 class Settings extends StatefulWidget {
   const Settings({super.key});
@@ -39,30 +36,30 @@ class _SettingsState extends State<Settings> {
       padding: const EdgeInsets.symmetric(
         horizontal: 20,
       ),
-      child: Column(
+      child: const Column(
         children: [
           Row(
             children: [
-              const Icon(
+              Icon(
                 Icons.light_mode_outlined,
               ),
-              const SizedBox(
+              SizedBox(
                 width: 20,
               ),
-              const Text(
+              Text(
                 "Theme",
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const Spacer(),
-              const Icon(
+              Spacer(),
+              Icon(
                 Icons.arrow_forward_ios_rounded,
               ),
             ],
           ),
-          const Divider(),
+          Divider(),
         ],
       ),
     );
@@ -73,30 +70,30 @@ class _SettingsState extends State<Settings> {
       padding: const EdgeInsets.symmetric(
         horizontal: 20,
       ),
-      child: Column(
+      child: const Column(
         children: [
           Row(
             children: [
-              const Icon(
+              Icon(
                 Icons.person_outline,
               ),
-              const SizedBox(
+              SizedBox(
                 width: 20,
               ),
-              const Text(
+              Text(
                 "Account",
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const Spacer(),
-              const Icon(
+              Spacer(),
+              Icon(
                 Icons.arrow_forward_ios_rounded,
               ),
             ],
           ),
-          const Divider(),
+          Divider(),
         ],
       ),
     );
@@ -107,30 +104,30 @@ class _SettingsState extends State<Settings> {
       padding: const EdgeInsets.symmetric(
         horizontal: 20,
       ),
-      child: Column(
+      child: const Column(
         children: [
           Row(
             children: [
-              const Icon(
+              Icon(
                 Icons.settings_outlined,
               ),
-              const SizedBox(
+              SizedBox(
                 width: 20,
               ),
-              const Text(
+              Text(
                 "General",
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const Spacer(),
-              const Icon(
+              Spacer(),
+              Icon(
                 Icons.arrow_forward_ios_rounded,
               ),
             ],
           ),
-          const Divider(),
+          Divider(),
         ],
       ),
     );
