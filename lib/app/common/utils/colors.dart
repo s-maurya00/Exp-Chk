@@ -9,6 +9,10 @@ const Color secondaryClrLight = Color(0xFFE1BEE7);
 const Color primaryClrDark = Color(0xFFC2185B);
 const Color secondaryClrDark = Color(0xFF7B1FA2);
 
+const Color whiteClr = Colors.white;
+const Color blackClr = Colors.black;
+const Color greyClr = Colors.grey;
+
 const Color darkGreyClr = Color(0xFF212121);
 const Color darkHeaderClr = Color(0xFF424242);
 
