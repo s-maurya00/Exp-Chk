@@ -36,10 +36,10 @@ TextStyle get subHeadingStyle {
 
 TextStyle get headingStyle {
   return GoogleFonts.lato(
-    textStyle: TextStyle(
+    textStyle: const TextStyle(
       fontSize: 28,
       fontWeight: FontWeight.w400,
-      color: Get.isDarkMode ? whiteClr : blackClr,
+      // color: Get.isDarkMode ? whiteClr : blackClr,
     ),
   );
 }
