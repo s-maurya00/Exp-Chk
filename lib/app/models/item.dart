@@ -8,8 +8,6 @@ class Item {
   String? purchaseDate;
   String? expiryDate;
 
-  String? notificationDate;
-  String? notificationTime;
   String? notificationId;
 
   int? productBarcode;
@@ -21,8 +19,6 @@ class Item {
     this.quantity,
     required this.purchaseDate,
     required this.expiryDate,
-    this.notificationDate,
-    this.notificationTime,
     this.notificationId,
     this.productBarcode,
   });
@@ -34,8 +30,6 @@ class Item {
     quantity = json['quantity'];
     purchaseDate = json['purchaseDate'].toString();
     expiryDate = json['expiryDate'].toString();
-    notificationDate = json['notificationDate'].toString();
-    notificationTime = json['notificationTime'].toString();
     notificationId = json['notificationId'].toString();
     productBarcode = json['productBarcode'];
   }
@@ -48,8 +42,6 @@ class Item {
       'quantity': quantity,
       'purchaseDate': purchaseDate,
       'expiryDate': expiryDate,
-      'notificationDate': notificationDate,
-      'notificationTime': notificationTime,
       'notificationId': notificationId,
       'productBarcode': productBarcode,
     };

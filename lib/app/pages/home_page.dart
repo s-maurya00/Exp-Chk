@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-import 'package:expchk/app/pages/home.dart';
-import 'package:expchk/app/pages/add_item_page.dart';
-import 'package:expchk/app/pages/settings.dart';
+import './home.dart';
+import './add_item_page.dart';
+import './settings.dart';
 
-import 'package:expchk/app/common/services/theme_services.dart';
-import 'package:expchk/app/common/utils/colors.dart';
+import '../common/services/theme_services.dart';
+import '../common/utils/colors.dart';
+
+import '../controllers/item_controller.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -17,6 +19,24 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final _itemController = Get.put(ItemController());
+  // the line final _itemController = Get.put(ItemController()); does the following:
+  // 1. Creates an instance of ItemController
+  // 2. Makes it available to all the child widgets of Home
+  // here, we use get.put() cause we want to create a new instance of ItemController which can be used by all the child widgets of Home. If we do final _itemController = ItemController(); then we will not be able to use it in the child widgets of Home.
+
+  // 3. to access this particular instance of ItemController in any other file, we can use Get.find<ItemController>() or Get.put<ItemController>() or Get.find() or Get.put(). example:
+  // final _itemController = Get.find<ItemController>();
+
+  // 4. to access it in child widgets of Home, we can use Get.find<ItemController>() or Get.put<ItemController>() or Get.find() or Get.put(). example:
+  // final _itemController = Get.find<ItemController>();
+
+  @override
+  void initState() {
+    super.initState();
+    _itemController.getItem();
+  }
+
   final navScreens = [
     const Home(),
     const Settings(),
@@ -141,6 +161,13 @@ class _HomePageState extends State<HomePage> {
           width: 15,
         ),
       ],
+      bottom: PreferredSize(
+        preferredSize: const Size.fromHeight(1),
+        child: Container(
+          color: context.isDarkMode ? Colors.grey[800] : Colors.grey[200],
+          height: 1,
+        ),
+      ),
     );
   }
 }

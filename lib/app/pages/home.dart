@@ -1,7 +1,11 @@
-import 'package:expchk/app/common/utils/theme.dart';
 import 'package:flutter/material.dart';
 
-import 'package:expchk/app/common/widgets/item_tile.dart';
+import 'package:get/get.dart';
+
+import '../common/widgets/item_tile.dart';
+import '../common/utils/theme.dart';
+
+import '../controllers/item_controller.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -11,6 +15,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  final _itemController = Get.find<ItemController>();
   bool isAscendSort = true;
 
   @override
@@ -64,37 +69,58 @@ class _HomeState extends State<Home> {
             ],
           ),
         ),
-        _showItems(context),
+        _showItems(),
       ],
     );
   }
 
-  _showItems(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.7648,
-      child: Column(
-        children: [
-          const SizedBox(
-            height: 10,
-          ),
-          Expanded(
-            child: ListView.builder(
+  _showItems() {
+    return Expanded(
+      child: Obx(
+        () {
+          print("length: ${_itemController.itemList.length}");
+          if (_itemController.isLoading.value) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          } else if (_itemController.itemList.isEmpty) {
+            return const Center(
+              child: Text("There are no items to show"),
+            );
+          } else {
+            return ListView.builder(
               shrinkWrap: true,
               physics: const BouncingScrollPhysics(),
-              itemCount: 11,
+              itemCount: _itemController.itemList.length,
               itemBuilder: (context, index) {
-                if (index == 10) {
-                  return const SizedBox(
-                    height: 15,
-                  );
-                } else {
-                  return const ItemTile();
-                }
+                return Column(
+                  children: [
+                    index == 0
+                        ? const SizedBox(
+                            height: 20,
+                          )
+                        : Container(),
+                    ItemTile(
+                      item: _itemController.itemList[
+                          _itemController.itemList.length - 1 - index],
+                          handleOnTap: _handleItemDelete,
+                    ),
+                    index == _itemController.itemList.length - 1
+                        ? const SizedBox(
+                            height: 20,
+                          )
+                        : Container(),
+                  ],
+                );
               },
-            ),
-          ),
-        ],
+            );
+          }
+        },
       ),
     );
+  }
+
+  _handleItemDelete(int id) {
+    _itemController.removeItem(id);
   }
 }

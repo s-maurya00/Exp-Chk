@@ -21,6 +21,9 @@ class Themes {
     appBarTheme: const AppBarTheme(
       backgroundColor: darkGreyClr,
     ),
+    colorScheme: const ColorScheme.dark(
+      background: darkGreyClr,
+    ),
     useMaterial3: true,
   );
 }
