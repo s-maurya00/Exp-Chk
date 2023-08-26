@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:numberpicker/numberpicker.dart';
 
-// import '../common/services/notification_services.dart';
+import './camera_page.dart';
 
 import '../common/utils/theme.dart';
 import '../common/utils/colors.dart';
@@ -15,7 +15,8 @@ import '../controllers/item_controller.dart';
 
 import '../models/item.dart';
 
-// import '../pages/scanner.dart';
+// import '../common/services/notification_services.dart';
+// import './scanner.dart';
 
 class AddItem extends StatefulWidget {
   const AddItem({super.key});
@@ -68,7 +69,7 @@ class _AddItemState extends State<AddItem> {
               children: [
                 GestureDetector(
                   onTap: () {
-                    print("Open Camera");
+                    Get.to(() => const CameraPage());
                   },
                   child: Container(
                     height: 100,
