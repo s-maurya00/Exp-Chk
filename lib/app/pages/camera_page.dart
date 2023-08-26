@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'package:camera/camera.dart';
@@ -14,8 +16,19 @@ class CameraPage extends StatefulWidget {
 class _CameraPageState extends State<CameraPage> {
   late CameraController _controller;
 
-  bool isCameraReady = false;
-  bool isCapturing = false;
+  bool _isCameraReady = false;
+  bool _isCapturing = false;
+  bool _isFlashOn = false;
+
+  // For Focusing
+  Offset _focusPoint = Offset(0, 0);
+
+  // For Zoom
+  double _currentZoom = 1.0;
+
+  // For Capturing
+  String _capturedImagePath = '';
+  File? _capturedImage;
 
   @override
   void initState() {
@@ -36,7 +49,7 @@ class _CameraPageState extends State<CameraPage> {
     await _controller.initialize();
     setState(
       () {
-        isCameraReady = true;
+        _isCameraReady = true;
       },
     );
   }
@@ -50,7 +63,7 @@ class _CameraPageState extends State<CameraPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: isCameraReady
+      body: _isCameraReady
           ? Stack(
               alignment: AlignmentDirectional.center,
               children: [
@@ -60,14 +73,14 @@ class _CameraPageState extends State<CameraPage> {
                 Positioned(
                   top: 0,
                   child: Container(
-                    height: 200,
+                    height: 100,
                     width: MediaQuery.of(context).size.width,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
-                          Colors.black,
+                          Colors.black.withOpacity(0.5),
                           Colors.transparent,
                         ],
                       ),
@@ -77,14 +90,14 @@ class _CameraPageState extends State<CameraPage> {
                 Positioned(
                   bottom: 0,
                   child: Container(
-                    height: 200,
+                    height: 150,
                     width: MediaQuery.of(context).size.width,
-                    decoration: const BoxDecoration(
+                    decoration: BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.bottomCenter,
                         end: Alignment.topCenter,
                         colors: [
-                          Colors.black,
+                          Colors.black.withOpacity(0.75),
                           Colors.transparent,
                         ],
                       ),
@@ -103,6 +116,78 @@ class _CameraPageState extends State<CameraPage> {
                       ),
                       borderRadius: BorderRadius.circular(30),
                     ),
+                  ),
+                ),
+                Positioned(
+                  top: kToolbarHeight,
+                  left: 15,
+                  child: CircleAvatar(
+                    backgroundColor: Colors.black.withOpacity(0.4),
+                    child: Padding(
+                      padding: const EdgeInsets.only(left: 4),
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        icon: const Icon(
+                          Icons.arrow_back_ios,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 50,
+                  width: MediaQuery.of(context).size.width,
+                  child: Row(
+                    children: [
+                      const Expanded(
+                        child: Icon(Icons.photo_library_outlined),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          debugPrint("Capture Image tapped");
+                        },
+                        child: Container(
+                          height: 80,
+                          width: 80,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(40),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                height: 70,
+                                width: 70,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  border: Border.all(
+                                    color: Colors.grey[300]!,
+                                    width: 5,
+                                    style: BorderStyle.solid,
+                                  ),
+                                  borderRadius: BorderRadius.circular(35),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: _isFlashOn
+                            ? const Icon(
+                                Icons.flash_on_rounded,
+                                size: 30,
+                              )
+                            : const Icon(
+                                Icons.flash_off_rounded,
+                                size: 30,
+                              ),
+                      ),
+                    ],
                   ),
                 ),
               ],
