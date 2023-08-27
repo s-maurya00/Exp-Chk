@@ -1,11 +1,10 @@
 import 'dart:io';
 
-import 'package:expchk/app/common/widgets/camera_bottom_bar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:camera/camera.dart';
-import 'package:path/path.dart' as path;
-import 'package:path_provider/path_provider.dart' as path_provider;
+
+import 'package:expchk/app/common/widgets/camera_bottom_bar.dart';
 
 class CameraPage extends StatefulWidget {
   const CameraPage({super.key});
@@ -21,15 +20,15 @@ class _CameraPageState extends State<CameraPage> {
   bool _isCapturing = false;
   bool _isFlashOn = false;
 
-  // For Focusing
-  Offset _focusPoint = Offset(0, 0);
+  // // For Focusing
+  // Offset _focusPoint = Offset(0, 0);
 
-  // For Zoom
-  double _currentZoom = 1.0;
+  // // For Zoom
+  // double _currentZoom = 1.0;
 
-  // For Capturing
-  String _capturedImagePath = '';
-  File? _capturedImage;
+  // // For Capturing
+  // String _capturedImagePath = '';
+  // File? _capturedImage;
 
   @override
   void initState() {
@@ -47,12 +46,42 @@ class _CameraPageState extends State<CameraPage> {
       enableAudio: false,
     );
 
-    await _controller.initialize();
-    setState(
-      () {
+    await _controller.initialize().then((_) {
+      if (!mounted) {
+        return;
+      }
+      setState(() {
         _isCameraReady = true;
-      },
-    );
+      });
+    }).catchError((Object e) {
+      if (e is CameraException) {
+        switch (e.code) {
+          case "CameraAccessDenied":
+            debugPrint("Camera access denied");
+            break;
+          default:
+            debugPrint("Camera error: ${e.description}");
+            break;
+        }
+      }
+    });
+    // setState(
+    //   () {
+    //     _isCameraReady = true;
+    //   },
+    // );
+  }
+
+  void setIsCapturing(bool value) {
+    setState(() {
+      _isCapturing = value;
+    });
+  }
+
+  void setFlashOn(bool value) {
+    setState(() {
+      _isFlashOn = value;
+    });
   }
 
   @override
@@ -160,7 +189,13 @@ class _CameraPageState extends State<CameraPage> {
                     // ),
                   ),
                 ),
-                CameraBottomBar(isFlashOn: _isFlashOn),
+                CameraBottomBar(
+                  controller: _controller,
+                  setIsCapturing: setIsCapturing,
+                  setIsFlashOn: setFlashOn,
+                  isFlashOn: _isFlashOn,
+                  isCapturing: _isCapturing,
+                ),
               ],
             )
           : const Center(
