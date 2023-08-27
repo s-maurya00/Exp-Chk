@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:camera/camera.dart';
 
-import 'package:expchk/app/common/widgets/camera_bottom_bar.dart';
+import '../common/widgets/camera_bottom_bar.dart';
 
 class CameraPage extends StatefulWidget {
   const CameraPage({Key? key}) : super(key: key);

@@ -1,4 +1,3 @@
-import 'package:expchk/app/common/widgets/fab.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -38,10 +37,10 @@ class _HomePageState extends State<HomePage> {
   int currScreenIndx = 0;
   bool isOnAddPage = false;
 
-  _setIsOnAddPage() {
+  _setIsOnAddPage(bool value) {
     setState(
       () {
-        isOnAddPage = true;
+        isOnAddPage = value;
       },
     );
   }
@@ -53,36 +52,8 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: _appBar(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: showFab == false
-          ? null
-          : FAB(isOnAddPage: isOnAddPage, setIsOnAddPage: _setIsOnAddPage),
-      bottomNavigationBar: BottomNavigationBar(
-        unselectedItemColor: primaryClr,
-        selectedItemColor: isOnAddPage ? primaryClr : secondaryClr,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.home_outlined,
-            ),
-            label: "Home",
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(
-              Icons.settings_outlined,
-            ),
-            label: "Settings",
-          ),
-        ],
-        onTap: (index) {
-          setState(
-            () {
-              currScreenIndx = index;
-              isOnAddPage = false;
-            },
-          );
-        },
-        currentIndex: currScreenIndx,
-      ),
+      floatingActionButton: showFab == false ? null : _floatingActionButton(),
+      bottomNavigationBar: _bottomNavBar(),
       body: navScreens[isOnAddPage == false ? currScreenIndx : 2],
     );
   }
@@ -118,6 +89,77 @@ class _HomePageState extends State<HomePage> {
           height: 1,
         ),
       ),
+    );
+  }
+
+  _floatingActionButton() {
+    return GestureDetector(
+      onTap: () => _setIsOnAddPage(true),
+      child: Container(
+        height: 70,
+        width: 70,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              isOnAddPage
+                  ? (Get.isDarkMode ? secondaryClrDark : secondaryClrLight)
+                  : (Get.isDarkMode ? primaryClrDark : primaryClrLight),
+              isOnAddPage
+                  ? (Get.isDarkMode ? secondaryClrLight : secondaryClrDark)
+                  : (Get.isDarkMode ? primaryClrLight : primaryClrDark),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(50),
+          boxShadow: [
+            BoxShadow(
+              color: isOnAddPage
+                  ? (Get.isDarkMode
+                      ? secondaryClr.withOpacity(0.5)
+                      : secondaryClrDark.withOpacity(0.5))
+                  : (Get.isDarkMode
+                      ? primaryClr.withOpacity(0.5)
+                      : primaryClrDark.withOpacity(0.5)),
+              spreadRadius: 1,
+              blurRadius: 15,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Icon(
+          Icons.add,
+          color: isOnAddPage ? secondaryClrLight : primaryClrLight,
+        ),
+      ),
+    );
+  }
+
+  _bottomNavBar() {
+    return BottomNavigationBar(
+      unselectedItemColor: primaryClr,
+      selectedItemColor: isOnAddPage ? primaryClr : secondaryClr,
+      items: const [
+        BottomNavigationBarItem(
+          icon: Icon(
+            Icons.home_outlined,
+          ),
+          label: "Home",
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(
+            Icons.settings_outlined,
+          ),
+          label: "Settings",
+        ),
+      ],
+      onTap: (index) {
+        setState(() {
+          currScreenIndx = index;
+        });
+        _setIsOnAddPage(false);
+      },
+      currentIndex: currScreenIndx,
     );
   }
 }
