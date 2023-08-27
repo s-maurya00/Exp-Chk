@@ -19,7 +19,7 @@ import '../models/item.dart';
 // import './scanner.dart';
 
 class AddItem extends StatefulWidget {
-  const AddItem({super.key});
+  const AddItem({Key? key}) : super(key: key);
 
   @override
   State<AddItem> createState() => _AddItemState();

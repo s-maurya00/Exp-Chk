@@ -7,7 +7,7 @@ import 'package:camera/camera.dart';
 import 'package:expchk/app/common/widgets/camera_bottom_bar.dart';
 
 class CameraPage extends StatefulWidget {
-  const CameraPage({super.key});
+  const CameraPage({Key? key}) : super(key: key);
 
   @override
   State<CameraPage> createState() => _CameraPageState();

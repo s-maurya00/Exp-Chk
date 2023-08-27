@@ -5,7 +5,11 @@ import 'package:get/get.dart';
 import '../../models/item.dart';
 
 class ItemTile extends StatelessWidget {
-  const ItemTile({required this.item, required this.handleOnTap, super.key});
+  const ItemTile({
+    Key? key,
+    required this.item,
+    required this.handleOnTap,
+  }) : super(key: key);
 
   final Item item;
   final Function handleOnTap;

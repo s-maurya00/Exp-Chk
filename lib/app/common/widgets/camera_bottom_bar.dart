@@ -12,13 +12,13 @@ import 'package:expchk/app/pages/image_preview.dart';
 
 class CameraBottomBar extends StatelessWidget {
   const CameraBottomBar({
+    Key? key,
     required this.controller,
     required this.setIsCapturing,
     required this.setIsFlashOn,
     required this.isFlashOn,
     required this.isCapturing,
-    super.key,
-  });
+  }) : super(key: key);
 
   final bool isFlashOn;
   final bool isCapturing;
