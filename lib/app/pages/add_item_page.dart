@@ -30,7 +30,10 @@ class _AddItemState extends State<AddItem> {
   DateTime _selectedExpiryDate = DateTime.now().add(const Duration(days: 1));
 
   final TextEditingController _nameController = TextEditingController();
-  final TextEditingController _quantityController = TextEditingController();
+
+  int _quantity = 1;
+  final int _quantityMin = 1;
+  final int _quantityMax = 100;
 
   @override
   Widget build(BuildContext context) {
@@ -103,11 +106,6 @@ class _AddItemState extends State<AddItem> {
                 ),
               ],
             ),
-            // MyInputField(
-            //   title: "Quantity",
-            //   placeholder: "Enter Quantity",
-            //   controller: _quantityController,
-            // ),
             const SizedBox(
               height: 20,
             ),
@@ -118,17 +116,14 @@ class _AddItemState extends State<AddItem> {
                   style: titleStyle,
                 ),
                 const Spacer(),
-                // a minus button
                 GestureDetector(
                   onTap: () {
                     setState(
                       () {
-                        if (_quantityController.text.isNotEmpty) {
-                          if (int.parse(_quantityController.text) > 1) {
-                            _quantityController.text =
-                                (int.parse(_quantityController.text) - 1)
-                                    .toString();
-                          }
+                        if (_quantity > _quantityMin) {
+                          _quantity = _quantity - 1;
+                        } else {
+                          _quantity = _quantityMin;
                         }
                       },
                     );
@@ -152,33 +147,28 @@ class _AddItemState extends State<AddItem> {
                   ),
                 ),
                 NumberPicker(
-                  itemWidth: 40,
+                  itemWidth: 45,
                   axis: Axis.horizontal,
-                  minValue: 1,
-                  maxValue: 100,
+                  minValue: _quantityMin,
+                  maxValue: _quantityMax,
                   haptics: true,
-                  value: _quantityController.text.isEmpty
-                      ? 1
-                      : int.parse(_quantityController.text),
+                  value: _quantity,
                   onChanged: (value) {
                     setState(
                       () {
-                        _quantityController.text = value.toString();
+                        _quantity = value;
                       },
                     );
                   },
                 ),
-                // a plus button
                 GestureDetector(
                   onTap: () {
                     setState(
                       () {
-                        if (_quantityController.text.isNotEmpty) {
-                          _quantityController.text =
-                              (int.parse(_quantityController.text) + 1)
-                                  .toString();
+                        if (_quantity < _quantityMax) {
+                          _quantity = _quantity + 1;
                         } else {
-                          _quantityController.text = "1";
+                          _quantity = _quantityMax;
                         }
                       },
                     );
@@ -243,37 +233,28 @@ class _AddItemState extends State<AddItem> {
                     const Color.fromARGB(255, 0, 175, 84),
                   ),
                 ),
-                child: GestureDetector(
-                  onTap: () {
-                    _validateItem();
-                  },
-                  child: SizedBox(
-                    height: 60,
-                    width: 170,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          margin: const EdgeInsets.only(right: 10),
-                          // decoration: BoxDecoration(
-                          //   color: Colors.green[100],
-                          //   borderRadius: BorderRadius.circular(50),
-                          // ),
-                          child: const Icon(
-                            Icons.check,
-                            size: 30,
-                            color: whiteClr,
-                          ),
+                child: SizedBox(
+                  height: 60,
+                  width: 170,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        margin: const EdgeInsets.only(right: 10),
+                        child: const Icon(
+                          Icons.check,
+                          size: 30,
+                          color: whiteClr,
                         ),
-                        Text(
-                          "Add this item",
-                          style: titleStyle.copyWith(
-                            color: whiteClr,
-                            fontSize: 20,
-                          ),
+                      ),
+                      Text(
+                        "Add this item",
+                        style: titleStyle.copyWith(
+                          color: whiteClr,
+                          fontSize: 20,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
                 onPressed: () {
@@ -308,17 +289,15 @@ class _AddItemState extends State<AddItem> {
   }
 
   _validateItem() {
-    if (_nameController.text.isNotEmpty &&
-        _quantityController.text.isNotEmpty) {
+    if (_nameController.text.isNotEmpty) {
       _setNotifications();
       _addItemToDb();
       // _setNotificationSchedule();
       // Get.back();
-    } else if (_nameController.text.isEmpty ||
-        _quantityController.text.isEmpty) {
+    } else if (_nameController.text.isEmpty) {
       Get.snackbar(
         "Required",
-        "All fields are required",
+        "Item name is a required field",
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Get.isDarkMode ? whiteClr : blackClr,
         colorText: Get.isDarkMode ? blackClr : whiteClr,
@@ -350,12 +329,12 @@ class _AddItemState extends State<AddItem> {
   }
 
   _addItemToDb() async {
-    ItemController _itemController = Get.find();
+    ItemController itemController = Get.find();
     try {
-      await _itemController.addItem(
+      await itemController.addItem(
         item: Item(
           productName: _nameController.text,
-          quantity: int.parse(_quantityController.text),
+          quantity: _quantity,
           // image: image,
           purchaseDate: DateFormat("dd/MM/yyyy").format(_selectedPurchasedDate),
           expiryDate: DateFormat("dd/MM/yyyy").format(_selectedExpiryDate),
