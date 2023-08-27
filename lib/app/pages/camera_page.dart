@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:expchk/app/common/widgets/camera_bottom_bar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:camera/camera.dart';
@@ -105,20 +106,6 @@ class _CameraPageState extends State<CameraPage> {
                   ),
                 ),
                 Positioned(
-                  top: (MediaQuery.of(context).size.height / 2) - 150,
-                  child: Container(
-                    height: 300,
-                    width: 300,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.white,
-                        width: 2,
-                      ),
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
-                ),
-                Positioned(
                   top: kToolbarHeight,
                   left: 15,
                   child: CircleAvatar(
@@ -138,58 +125,42 @@ class _CameraPageState extends State<CameraPage> {
                   ),
                 ),
                 Positioned(
-                  bottom: 50,
-                  width: MediaQuery.of(context).size.width,
-                  child: Row(
-                    children: [
-                      const Expanded(
-                        child: Icon(Icons.photo_library_outlined),
+                  top: (MediaQuery.of(context).size.height / 2) - 150,
+                  child: Container(
+                    height: 300,
+                    width: 300,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.white,
+                        width: 2,
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          debugPrint("Capture Image tapped");
-                        },
-                        child: Container(
-                          height: 80,
-                          width: 80,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(40),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                height: 70,
-                                width: 70,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(
-                                    color: Colors.grey[300]!,
-                                    width: 5,
-                                    style: BorderStyle.solid,
-                                  ),
-                                  borderRadius: BorderRadius.circular(35),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: _isFlashOn
-                            ? const Icon(
-                                Icons.flash_on_rounded,
-                                size: 30,
-                              )
-                            : const Icon(
-                                Icons.flash_off_rounded,
-                                size: 30,
-                              ),
-                      ),
-                    ],
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    // child: const Column(
+                    //   children: [
+                    //     Expanded(
+                    //       child: Row(
+                    //         children: [
+                    //           Text("data"),
+                    //           Spacer(),
+                    //           Text("data"),
+                    //         ],
+                    //       ),
+                    //     ),
+                    //     Expanded(
+                    //       child: Row(
+                    //         children: [
+                    //           Text("data"),
+                    //           Spacer(),
+                    //           Text("data"),
+                    //         ],
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                   ),
                 ),
+                CameraBottomBar(isFlashOn: _isFlashOn),
               ],
             )
           : const Center(
