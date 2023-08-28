@@ -9,7 +9,7 @@ class ItemController extends GetxController {
   List<Item> itemList = <Item>[].obs;
   RxBool isLoading = true.obs;
   int lastFetchedIndex = -1;
-  RxList<int> selectedItems = <int>[].obs;
+  RxList<int> selectedItemIds = <int>[].obs;
 
   @override
   void onReady() {
@@ -59,7 +59,7 @@ class ItemController extends GetxController {
     getItem();
   }
 
-  void removeItemList(List<int> ids) async {
+  void removeItemList(RxList<int> ids) async {
     await DBHelper.deleteListOfItems(ids);
     getItem();
   }
@@ -75,10 +75,10 @@ class ItemController extends GetxController {
   // }
 
   void toggleSelectedItem(int id) {
-    if (selectedItems.contains(id)) {
-      selectedItems.remove(id);
+    if (selectedItemIds.contains(id)) {
+      selectedItemIds.remove(id);
     } else {
-      selectedItems.add(id);
+      selectedItemIds.add(id);
     }
   }
 }

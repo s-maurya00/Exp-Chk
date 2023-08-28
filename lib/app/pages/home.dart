@@ -91,7 +91,7 @@ class _HomeState extends State<Home> {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                if (_itemController.selectedItems.isNotEmpty)
+                if (_itemController.selectedItemIds.isNotEmpty)
                   _showSelectedItemsHeader(),
                 Expanded(
                   child: ListView.builder(
@@ -110,12 +110,21 @@ class _HomeState extends State<Home> {
                                 _itemController.itemList.length - 1 - index],
                             onItemTap: () {
                               _itemController.toggleSelectedItem(
-                                  _itemController.itemList.length - 1 - index);
+                                _itemController
+                                    .itemList[_itemController.itemList.length -
+                                        1 -
+                                        index]
+                                    .id!,
+                              );
                             },
-                            isItemSelected: _itemController.selectedItems
-                                .contains(_itemController.itemList.length -
-                                    1 -
-                                    index),
+                            isItemSelected:
+                                _itemController.selectedItemIds.contains(
+                              _itemController
+                                  .itemList[_itemController.itemList.length -
+                                      1 -
+                                      index]
+                                  .id!,
+                            ),
                           ),
                           if (index == _itemController.itemList.length - 1)
                             const SizedBox(
@@ -145,7 +154,7 @@ class _HomeState extends State<Home> {
               width: 20,
             ),
             Text(
-              "${_itemController.selectedItems.length} items selected",
+              "${_itemController.selectedItemIds.length} items selected",
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -171,6 +180,7 @@ class _HomeState extends State<Home> {
   }
 
   _deleteSelectedItems() {
-    _itemController.removeItemList(_itemController.selectedItems);
+    _itemController.removeItemList(_itemController.selectedItemIds);
+    _itemController.selectedItemIds.clear();
   }
 }
