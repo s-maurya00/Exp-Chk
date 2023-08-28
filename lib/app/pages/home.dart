@@ -1,3 +1,4 @@
+import 'package:expchk/app/common/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -78,7 +79,6 @@ class _HomeState extends State<Home> {
     return Expanded(
       child: Obx(
         () {
-          print("length: ${_itemController.itemList.length}");
           if (_itemController.isLoading.value) {
             return const Center(
               child: CircularProgressIndicator(),
@@ -88,31 +88,45 @@ class _HomeState extends State<Home> {
               child: Text("There are no items to show"),
             );
           } else {
-            return ListView.builder(
-              shrinkWrap: true,
-              physics: const BouncingScrollPhysics(),
-              itemCount: _itemController.itemList.length,
-              itemBuilder: (context, index) {
-                return Column(
-                  children: [
-                    index == 0
-                        ? const SizedBox(
-                            height: 20,
-                          )
-                        : Container(),
-                    ItemTile(
-                      item: _itemController.itemList[
-                          _itemController.itemList.length - 1 - index],
-                          handleOnTap: _handleItemDelete,
-                    ),
-                    index == _itemController.itemList.length - 1
-                        ? const SizedBox(
-                            height: 20,
-                          )
-                        : Container(),
-                  ],
-                );
-              },
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                if (_itemController.selectedItems.isNotEmpty)
+                  _showSelectedItemsHeader(),
+                Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: _itemController.itemList.length,
+                    itemBuilder: (context, index) {
+                      return Column(
+                        children: [
+                          if (index == 0)
+                            const SizedBox(
+                              height: 20,
+                            ),
+                          ItemTile(
+                            item: _itemController.itemList[
+                                _itemController.itemList.length - 1 - index],
+                            onItemTap: () {
+                              _itemController.toggleSelectedItem(
+                                  _itemController.itemList.length - 1 - index);
+                            },
+                            isItemSelected: _itemController.selectedItems
+                                .contains(_itemController.itemList.length -
+                                    1 -
+                                    index),
+                          ),
+                          if (index == _itemController.itemList.length - 1)
+                            const SizedBox(
+                              height: 40,
+                            ),
+                        ],
+                      );
+                    },
+                  ),
+                ),
+              ],
             );
           }
         },
@@ -120,7 +134,43 @@ class _HomeState extends State<Home> {
     );
   }
 
-  _handleItemDelete(int id) {
-    _itemController.removeItem(id);
+  _showSelectedItemsHeader() {
+    return Container(
+      color: context.isDarkMode ? primaryClrDark : primaryClrLight,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Row(
+          children: [
+            const SizedBox(
+              width: 20,
+            ),
+            Text(
+              "${_itemController.selectedItems.length} items selected",
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const Spacer(),
+            GestureDetector(
+              onTap: () {
+                _deleteSelectedItems();
+              },
+              child: const Icon(
+                Icons.delete_rounded,
+                size: 28,
+              ),
+            ),
+            const SizedBox(
+              width: 20,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  _deleteSelectedItems() {
+    _itemController.removeItemList(_itemController.selectedItems);
   }
 }

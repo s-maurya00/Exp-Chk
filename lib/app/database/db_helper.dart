@@ -69,12 +69,23 @@ class DBHelper {
     }
   }
 
-  // not functional yet
   static Future<int> delete(int id) async {
     try {
       return await _db!.delete(_dbName, where: "id = ?", whereArgs: [id]);
     } catch (e) {
       debugPrint("Error in DBHelper.delete: ${e.toString()}");
+      return -1;
+    }
+  }
+
+  static Future<int> deleteListOfItems(List<int> ids) async {
+    try {
+      String _ids = ids.join(", ");
+      print("the ids string is $_ids");
+      print("The sql query is DELETE FROM $_dbName WHERE id IN ($_ids)");
+      return await _db!.rawDelete("DELETE FROM $_dbName WHERE id IN ($_ids)");
+    } catch (e) {
+      debugPrint("Error in DBHelper.deleteList: ${e.toString()}");
       return -1;
     }
   }

@@ -21,6 +21,8 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final _itemController = Get.put(ItemController());
 
+  List<int> selectedItems = [];
+
   @override
   void initState() {
     super.initState();
